@@ -1,28 +1,5 @@
 jQuery(document).ready(function($) {
     
-    //Check if Disqus div exists on page and initialise and load disqus
-    if ($('.disqus')[0]){
-        
-        var identifier = $('.disqus').data('uid');
-        var title = $('.disqus').data('title');
-        var url = $('.disqus').data('url');
-
-        var options =   {
-
-              scriptUrl: '//businesstechnology.disqus.com/embed.js',
-              laziness: 1,
-              throttle: 250,
-              disqusConfig: function()
-              {
-                    this.page.title       = title;
-                    this.page.url         = url;
-                    this.page.identifier  = identifier + " https://businesstech.co.za/news/?p=" + identifier;
-              }
-
-        };
-
-        $.disqusLoader( '.disqus', options);
-    }
     //-----------------------------------------------------------------//
     
     //Show sub menu on hover
@@ -57,32 +34,6 @@ jQuery(document).ready(function($) {
         $('.nav-search-bar').focus();
     });
     */
-    //-----------------------//
-    
-   //  Next and previous article boxes
-    var hidden = 0;
-    $('.next-arrow').hover(function() {
-        $('.next-article-link').animate({'margin-right': '40px'}, 500).clearQueue();
-    });
-    $('#next-article').mouseleave(function() {
-        $('.next-article-link').animate({'margin-right': '-280px'}, 500).clearQueue();
-        hidden = 1;
-    });
-    $('.next-article-link').mouseleave(function() {
-        $('.next-article-link').animate({'margin-right': '-280px'}, 500).clearQueue();
-        hidden = 1;
-    });
-    $('.previous-arrow').hover(function() {
-        $('.previous-article-link').animate({'margin-left': '30px'}, 500).clearQueue();
-    });
-    $('#previous-article').mouseleave(function() {
-        $('.previous-article-link').animate({'margin-left': '-291px'}, 500).clearQueue();
-    });
-
-    if( $('.next-article-link').length )
-    {
-        $('.next-article-link').delay(5500).animate({'margin-right': '40px'}, 1000);
-    }
     //-----------------------//
     
     
@@ -144,25 +95,6 @@ jQuery(document).ready(function($) {
     
     //-----------------------//
     
-    //Autoload comments button
-    $('.switch').click(function() {
-        if (getCookie("comments") == "true") {
-            $(this).find("span").animate({'left': '1px'}, 100).clearQueue();
-            $(this).animate({'opacity': '0.2'}, 100).clearQueue();
-            document.cookie = "comments=true; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/";
-        }
-        else {
-            var date, expires;
-            date = new Date();
-            date.setTime(date.getTime()+(365*24*60*60*1000));
-            expires = "; expires="+date.toGMTString();
-            document.cookie = "comments=true" + expires + "; path=/";
-            $(this).find("span").animate({'left': '9px'}, 100).clearQueue();
-            $(this).animate({'opacity': '0.5'}, 100).clearQueue();
-        }
-    });
-    //-----------------------//
-    
     //Floating newsletter subscription box
     $('.float-newsletter-bar .subscribe-submit').click(function() {
         var date, expires;
@@ -197,14 +129,7 @@ jQuery(document).ready(function($) {
         $('.fixed-mobile-banner').show();
     }
     //-----------------------//
-      
-    
-    //Sticky sidebar
-    $('.single-side, .feed_artice_side').theiaStickySidebar({
-      // Settings
-      additionalMarginTop: 100
-    });
-    //-----------------------//
+
     
     //-----------------------//
     //Newsletter subscription
@@ -316,97 +241,7 @@ function getCookie(cname) {
 }
 //-----------------------//
 
-//-- DISQUS LAZY LOADER --//
 
-;( function( $, window, document, undefined ) {
-    
-	'use strict';
-
-	var $win			= $( window ),
-        
-		disqusConfig	= false,
-		scriptUrl		= false,
-
-		scriptStatus	= 'unloaded',
-		$instance		= $(),
-
-		init = function() {
-            
-			if( $instance.data( 'disqusLoaderStatus' ) == 'loaded' )
-				return true;
-
-			$( '#disqus_thread' ).removeAttr( 'id' );
-			$instance.attr( 'id', 'disqus_thread' ).data( 'disqusLoaderStatus', 'loaded' );
-
-			if( scriptStatus == 'loaded' ) {
-				DISQUS.reset({ reload: true, config: disqusConfig });
-			}
-			else {
-                
-                // unloaded | loading 
-				window.disqus_config = disqusConfig;
-                
-                if (getCookie("comments") == "true") {
-                    
-                    scriptStatus = 'loading';
-                    $.ajax({
-                        url:		scriptUrl,
-                        async:		true,
-                        cache:		true,
-                        dataType:	'script',
-                        success:	function(data)
-                        {
-                            scriptStatus = 'loaded';
-                        }
-                    });
-                    
-                    $('.show-comments').fadeOut(200); 
-                    $('.comments').delay(200).fadeIn();
-                    $('.switch').find("span").animate({'left': '9px'}, 100).clearQueue();
-                    $('.switch').animate({'opacity': '0.5'}, 100).clearQueue();
-                }
-                
-                // Show comments button
-                $('.show-comments').click(function() {
-                    if( scriptStatus == 'unloaded' ) {
-                        
-                        $(this).fadeOut(200); 
-                        $('.comments').delay(200).fadeIn(); 
-
-                        scriptStatus = 'loading';
-                        $.ajax({
-                            url:		scriptUrl,
-                            async:		true,
-                            cache:		true,
-                            dataType:	'script',
-                            success:	function(data)
-                            {
-                                scriptStatus = 'loaded';
-                            }
-                        });
-                    }
-                });
-                //-----------------------//
-            
-			}
-		};
-
-	$.disqusLoader = function( element, options ) {
-        
-		options = $.extend({},{
-			scriptUrl:		false,
-			disqusConfig:	false,
-
-		}, options );
-        
-		disqusConfig	= options.disqusConfig;
-		scriptUrl		= scriptUrl === false ? options.scriptUrl : scriptUrl; // set it only once
-		$instance		= ( typeof element == 'string' ? $( element ) : element ).eq( 0 );
-        
-		$instance.data( 'disqusLoaderStatus', 'unloaded' );
-
-		init();
-	};
 
 })( jQuery, window, document );
 
